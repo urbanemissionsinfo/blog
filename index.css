@@ -1,0 +1,202 @@
+/* ==========================================================================
+   Urban Emissions Info — shared brand stylesheet
+   Deep green #164D12, off-white background, Inter (UI) + Source Serif 4 (headings)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap');
+
+:root {
+	--ue-green: #164D12;
+	--ue-green-dark: #0e3a0b;
+	--ue-green-light: #e7efe4;
+	--ue-bg: #faf9f6;
+	--ue-surface: #ffffff;
+	--ue-text: #2a2a26;
+	--ue-text-muted: #6b6b62;
+	--ue-border: #e2ddd0;
+	--ue-shadow: 0 1px 3px rgba(22, 77, 18, 0.08);
+
+	--ue-emissions: #e63946;
+	--ue-monitoring: #457b9d;
+	--ue-control: #2a9d8f;
+	--ue-modeling: #f4a261;
+	--ue-geospatial: #7209b7;
+
+	--font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-heading: 'Source Serif 4', Georgia, serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 20px;
+	font-family: var(--font-body);
+	color: var(--ue-text);
+	background-color: var(--ue-bg);
+	line-height: 1.6;
+}
+
+.container {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+h1, h2, h3 {
+	font-family: var(--font-heading);
+	color: var(--ue-green);
+	margin-top: 0;
+}
+
+h1 {
+	font-weight: 700;
+	border-bottom: 2px solid var(--ue-green-light);
+	padding-bottom: 12px;
+	margin-bottom: 20px;
+}
+
+a {
+	color: var(--ue-green);
+}
+
+hr {
+	border: none;
+	border-top: 1px solid var(--ue-border);
+	margin: 20px 0;
+}
+
+/* ---- Navigation / filter buttons ---- */
+.nav-button {
+	padding: 8px 16px;
+	margin: 0 8px 10px 0;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	color: white;
+	font-family: var(--font-body);
+	font-weight: 600;
+	font-size: 0.9rem;
+	transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.nav-button:hover {
+	opacity: 0.88;
+}
+
+.nav-button:active {
+	transform: translateY(1px);
+}
+
+.nav-button.emissions { background-color: var(--ue-emissions); }
+.nav-button.monitoring { background-color: var(--ue-monitoring); }
+.nav-button.control { background-color: var(--ue-control); }
+.nav-button.modeling { background-color: var(--ue-modeling); }
+.nav-button.geospatial { background-color: var(--ue-geospatial); }
+.nav-button.all { background-color: var(--ue-green); }
+
+/* ---- Blog list items ---- */
+.blog-item {
+	display: block;
+	padding: 15px 18px;
+	margin-bottom: 10px;
+	background-color: var(--ue-surface);
+	text-decoration: none;
+	color: var(--ue-text);
+	border-radius: 6px;
+	box-shadow: var(--ue-shadow);
+	border: 1px solid var(--ue-border);
+	transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.blog-item:hover {
+	box-shadow: 0 3px 10px rgba(22, 77, 18, 0.12);
+	transform: translateY(-1px);
+}
+
+.blog-item strong {
+	font-family: var(--font-heading);
+	font-size: 1.05rem;
+	color: var(--ue-text);
+}
+
+/* Single-category left border styles */
+.emissions-border { border-left: 5px solid var(--ue-emissions) !important; }
+.monitoring-border { border-left: 5px solid var(--ue-monitoring) !important; }
+.control-border { border-left: 5px solid var(--ue-control) !important; }
+.modeling-border { border-left: 5px solid var(--ue-modeling) !important; }
+.geospatial-border { border-left: 5px solid var(--ue-geospatial) !important; }
+
+#no-blogs {
+	color: var(--ue-text-muted);
+	font-style: italic;
+	padding: 20px 0;
+}
+
+/* ---- Blog post page ---- */
+.back-link {
+	display: inline-block;
+	margin-bottom: 20px;
+	text-decoration: none;
+	color: var(--ue-green);
+	font-weight: 600;
+}
+
+.back-link:hover {
+	text-decoration: underline;
+}
+
+#blog-content {
+	background-color: var(--ue-surface);
+	border: 1px solid var(--ue-border);
+	border-radius: 8px;
+	padding: 30px 35px;
+	box-shadow: var(--ue-shadow);
+}
+
+#blog-content h1,
+#blog-content h2,
+#blog-content h3 {
+	color: var(--ue-green);
+}
+
+#blog-content a {
+	color: var(--ue-monitoring);
+}
+
+#blog-content code {
+	background-color: var(--ue-green-light);
+	padding: 2px 5px;
+	border-radius: 3px;
+	font-size: 0.9em;
+}
+
+#blog-content pre {
+	background-color: var(--ue-green-light);
+	padding: 15px;
+	border-radius: 6px;
+	overflow-x: auto;
+}
+
+#blog-content blockquote {
+	border-left: 4px solid var(--ue-green);
+	margin: 0;
+	padding: 4px 20px;
+	color: var(--ue-text-muted);
+	background-color: var(--ue-green-light);
+}
+
+#blog-content img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 16px auto;
+	border-radius: 6px;
+}
+
+#blog-content table {
+	max-width: 100%;
+	display: block;
+	overflow-x: auto;
+}

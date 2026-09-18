@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Urban Emissions Blog</title>
+	<link rel="stylesheet" href="index.css">
+    <script type="text/javascript">
+        const originalTitle = document.title;
+
+        document.addEventListener("visibilitychange", function () {
+        if (document.hidden) {
+            document.title = "Pause your emissions monitoring? 🏭";
+        } else {
+            document.title = originalTitle;
+        }
+        });
+    </script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="content">
+        <h1>Urban Emissions Info Blog</h1>
+        
+        <!-- Filter Buttons -->
+        <button class="nav-button emissions" onclick="filterBlogs('Emissions')">Emissions</button>
+        <button class="nav-button monitoring" onclick="filterBlogs('Monitoring')">Monitoring</button>
+        <button class="nav-button control" onclick="filterBlogs('Control')">Control</button>
+		<button class="nav-button modeling" onclick="filterBlogs('Modeling')">Modeling</button>
+		<button class="nav-button geospatial" onclick="filterBlogs('Geospatial')">Geospatial</button>
+        <button class="nav-button all" onclick="filterBlogs('')">Show All</button>
+
+        <hr />
+
+        <ul id="blog-list" style="list-style: none; padding: 0;"></ul>
+        <p id="no-blogs" style="display:none;">No blogs found</p>
+    </div>
+  </div>
+
+<script>
+		let blogs = [];
+		const blogList = document.getElementById('blog-list');
+		const noBlogs = document.getElementById('no-blogs');
+
+		async function loadBlogs() {
+			try {
+				const response = await fetch('blogs-list.json');
+				if (!response.ok) throw new Error('Could not load blogs list');
+				blogs = await response.json();
+				filterBlogs('');
+			} catch (error) {
+				console.error('Error loading blogs:', error);
+				noBlogs.style.display = 'block';
+				noBlogs.textContent = 'Could not load blogs. Make sure blogs-list.json exists.';
+			}
+		}
+
+		function filterBlogs(category) {
+			const filtered = category
+				? blogs.filter(blog => {
+					const categories = blog.category.split(' ');
+					return categories.includes(category);
+				})
+				: blogs;
+
+			filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+			blogList.innerHTML = '';
+
+			if (filtered.length === 0) {
+				noBlogs.style.display = 'block';
+				noBlogs.textContent = category ? `No blogs found for "${category}"` : 'No blogs available';
+			} else {
+				noBlogs.style.display = 'none';
+				filtered.forEach(blog => {
+					const link = document.createElement('a');
+					link.href = `blog.html?title=${encodeURIComponent(blog.slug)}`;
+					
+					const categories = blog.category.split(' ');
+					
+					if (categories.length > 1) {
+						link.className = `blog-item`;
+						const colors = {
+							'emissions': '#e63946',
+							'monitoring': '#457b9d',
+							'control': '#2a9d8f',
+							'modeling': '#f4a261',
+							'geospatial': '#7209b7'
+						};
+						const borderColors = categories.map(cat => colors[cat.toLowerCase()] || '#ccc');
+						
+						link.style.borderLeft = 'none';
+						link.style.paddingLeft = '1rem';
+						link.style.position = 'relative';
+						
+						const barsHtml = borderColors.map((color, i) => 
+							`<span style="position: absolute; left: ${i * 7}px; top: 0; bottom: 0; width: 5px; background-color: ${color}; border-radius: 3px 0 0 3px;"></span>`
+						).join('');
+						
+						const dateObj = new Date(blog.date);
+						const formattedDate = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+						
+						link.innerHTML = `
+							${barsHtml}
+							<div style="margin-left: ${categories.length * 7}px;">
+								<strong>${blog.title}</strong>
+								<span style="float: right; font-size: 0.9em; color: #888;">${formattedDate}</span>
+							</div>
+						`;
+					} else {
+						link.className = `blog-item ${categories[0].toLowerCase()}-border`;
+						
+						const dateObj = new Date(blog.date);
+						const formattedDate = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+						
+						link.innerHTML = `
+							<strong>${blog.title}</strong>
+							<span style="float: right; font-size: 0.9em; color: #888;">${formattedDate}</span>
+						`;
+					}
+					blogList.appendChild(link);
+				});
+			}
+		}
+
+		loadBlogs();
+	</script>
+</body>
+</html>

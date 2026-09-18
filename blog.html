@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Emissions Blog</title>
+    <link rel="stylesheet" href="index.css">
+    <!-- Showdown.js to convert Markdown to HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+</head>
+<body>
+  <div class="container">
+      <a href="index.html" class="back-link">&larr; Back to Home</a>
+      <div id="blog-content">
+          <p>Loading blog post...</p>
+      </div>
+  </div>
+
+  <script>
+      // Get the slug from the URL query string (e.g., ?title=my-post)
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('title');
+
+      async function loadBlogPost() {
+          const contentDiv = document.getElementById('blog-content');
+          if (!slug) {
+              contentDiv.innerHTML = '<p>Blog post not specified.</p>';
+              return;
+          }
+
+          try {
+              // Fetch the markdown file from the blogs/ folder
+              const response = await fetch(`blogs/${slug}.md`);
+              if (!response.ok) throw new Error('Blog post not found.');
+              
+              const markdownText = await response.text();
+
+              // Convert Markdown to HTML using Showdown
+              const converter = new showdown.Converter();
+              const htmlContent = converter.makeHtml(markdownText);
+
+              // Inject the converted HTML into the page
+              contentDiv.innerHTML = htmlContent;
+          } catch (error) {
+              console.error('Error loading blog post:', error);
+              contentDiv.innerHTML = '<p>Could not load this blog post. Please check back later.</p>';
+          }
+      }
+
+      loadBlogPost();
+  </script>
+</body>
+</html>
